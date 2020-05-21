@@ -21,9 +21,9 @@ $id = htmlspecialchars($_GET['id']);
 </header>
 <body>
 <?php
-$articles = Entries::getArticlesById($id, $pdo);
-foreach($articles as $article):
-    $entries = new Entries($article['title'],$article['intro'],$article['content']);
+    $articles = Entries::getArticlesById($id, $pdo);
+    foreach($articles as $article):
+        $entries = new Entries($article['title'],$article['intro'],$article['content']);
 ?>
     <div>
         <h2><?=$entries->getTitle();?></h2>
@@ -33,9 +33,26 @@ foreach($articles as $article):
                 <?=$entries->getContent();?>
             </span>
         </p>
+    </div>
 <?php
 endforeach;
 ?>
+<hr>
+        <h2>Комментарии к статье:</h2>
+<?php
+        $comments = Comments::getComments($id, $pdo);
+        foreach ($comments as $comment):
+            $comm = new Comments($comment['name'],$comment['body']);
+?>
+        <div>
+            <h4>Комментатор: <?=$comm->getName().'<br>'?></h4>
+            <span>
+                <b>Комментарий:</b><br>
+                <?=$comm->getBody().'<hr>';?>
+            </span>
+        </div>
+        <?php endforeach; ?>
+
 <hr>
     <h2>Добавить комментарий</h2>
         <form action="addComment.php" method="post">
